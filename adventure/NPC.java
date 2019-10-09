@@ -22,10 +22,10 @@ public class NPC implements Cloneable {
 	public int Bond;
 	public int State; //2:in Room, 1:follow, 0:dead
 	public int Hp;
-	public int Atk;
+	public double Atk;
 	public HashMap<String,String> Gifts = new HashMap<String,String>();
 	
-	public NPC(String name, boolean t, String d1, String d2, String d3, String d4, String d5, String r, int c, int b, int atk, ArrayList<NPC> n) {
+	public NPC(String name, boolean t, String d1, String d2, String d3, String d4, String d5, String r, int c, int b, double atk) {
 		Name = name;
 		evil = false;
 		talk = t;
@@ -47,13 +47,13 @@ public class NPC implements Cloneable {
 		Atk = atk;
 		State = 2;
 		hasNPC = null;
-		n.add(this);
 	}
 	
 	public void attack(Player player) {
 		if (evil) {
-			player.hp -= Atk*player.Dfc;
-			System.out.println(Name+" attacks you! [hp -"+Atk+"]");
+			double a = Atk*player.Dfc;
+			player.hp -= a;
+			System.out.println(Name+" attacks you! [hp -"+a+"]");
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class NPC implements Cloneable {
 			double a = player.coin*Math.random();
 			player.coin -= Math.floor(a);
 			System.out.println(Name+" steals "+Math.floor(a)+" coins from you!");
-			player.Location.hasNPC.remove(0);
+			player.Location.hasNPC = null;
 			System.out.println(Name+" runs away!");
 		}
 	}
@@ -79,26 +79,12 @@ public class NPC implements Cloneable {
 			inBuy = true;
 		}
 	}
-	
-	public void follow(Player player) {
-		if (State==2) {
-			if (Bond<100) {
-				System.out.println(Name+" hesitated");
-			} else {
-				State = 1;
-				if (hasNPC!=null) {
-					hasNPC.Bond += 50;
-				}
-				player.Location.hasNPC.remove(0);
-				System.out.println(Name+" follows you.");
-			}
-		}
-	}
-	
+		
 	public void free(Player player) {
 		if (free) {
 			System.out.println(Name+" is free!");
 		} else {
+			player.Location.hasNPC = null;
 			if (Bond>=100) {
 				System.out.println("The dragon flies up to the sky immediately, hovering above the castle.");
 			} else {
@@ -131,7 +117,7 @@ public class NPC implements Cloneable {
 	}
 	
 	public void Choice(int choice, Player player) {
-		if (player.Location.hasNPC.get(0).inBuy) {
+		if (inBuy) {
 			if (choice>0&&choice<=sellItem.size()) {
 				if (player.coin>=sellItem.get(choice-1).Price) {
 					player.coin -= sellItem.get(choice-1).Price;
@@ -160,7 +146,11 @@ public class NPC implements Cloneable {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected NPC clone() throws CloneNotSupportedException {
-		return (NPC) super.clone();
+		NPC npc = (NPC) super.clone();
+		npc.hasItem = (ArrayList<Item>) hasItem.clone();
+		npc.sellItem = (ArrayList<Item>) sellItem.clone();
+		return npc;
 	}
 }

@@ -20,7 +20,7 @@ public class Item {
 		Hp = hp;
 		Price = price;
 		Atk = 0;
-		Dfc = 0;
+		Dfc = 1.0;
 	}
 	
 	public void present(NPC npc, Player player) {
@@ -29,7 +29,7 @@ public class Item {
 			npc.Bond += BOND;
 			System.out.println(npc.Gifts.get(Name));
 		} else {
-			System.out.println(npc.Reject);
+			System.out.println(npc.Name+": "+npc.Reject);
 		}
 	}
 	

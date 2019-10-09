@@ -7,7 +7,7 @@ public class Room implements Cloneable {
 	public String Name;
 	public HashMap<String,Room> Direction = new HashMap<>();
 	public ArrayList<Item> hasItem;
-	public ArrayList<NPC> hasNPC;
+	public NPC hasNPC;
 	public boolean hasBonfire;
 	public boolean hasTreasure;
 	public boolean lockedDoor;
@@ -28,7 +28,7 @@ public class Room implements Cloneable {
 		Dark = false;
 		Damp = false;
 		hasItem = new ArrayList<Item>();
-		hasNPC = new ArrayList<NPC>();
+		hasNPC = null;
 		r.add(this);
 	}
 	
@@ -38,8 +38,8 @@ public class Room implements Cloneable {
 			if (lockedDoor) {
 				System.out.println("There's a trapdoor behind the throne. Where can I find the key?");
 			}
-			if (hasNPC.size()==1) {
-				System.out.println("There's a "+hasNPC.get(0).Name+" in the "+Name);
+			if (hasNPC!=null) {
+				System.out.println("There's a "+hasNPC.Name+" in the "+Name);
 			}
 			if (hasTreasure) {
 				System.out.println("There is a treasure box.");
@@ -74,6 +74,22 @@ public class Room implements Cloneable {
 		}
 	}
 	
+	public void follow(Player player) {
+		if (hasNPC.State==2) {
+			if (hasNPC.Bond<100) {
+				System.out.println(hasNPC.Bond);
+				System.out.println(hasNPC.Name+" hesitated");
+			} else {
+				hasNPC.State = 1;
+				if (hasNPC.hasNPC!=null) {
+					hasNPC.hasNPC.Bond += 50;
+				}
+				System.out.println(hasNPC.Name+" follows you.");
+				hasNPC = null;
+			}
+		}
+	}
+	
 	public void search(Player player) {
 		if (hasItem.size()>0) {
 			player.bag.put(hasItem.get(0).Name,hasItem.get(0));
@@ -103,10 +119,12 @@ public class Room implements Cloneable {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected Room clone() throws CloneNotSupportedException {
 		Room room = (Room) super.clone();
-		for (NPC npc: room.hasNPC) {
-			npc = npc.clone();
+		room.hasItem = (ArrayList<Item>) hasItem.clone();
+		if (hasNPC!=null) {
+			room.hasNPC = hasNPC.clone();
 		}
 		return room;
 	}
