@@ -36,7 +36,7 @@ public class Room implements Cloneable {
 		if (visited) {
 			System.out.println(Intro2);
 			if (lockedDoor) {
-				System.out.println("There's a trapdoor behind the throne. Where can I find the key?");
+				System.out.println("There's a trapdoor behind the throne. Where can you find the key?");
 			}
 			if (hasNPC!=null) {
 				System.out.println("There's a "+hasNPC.Name+" in the "+Name);
@@ -77,8 +77,11 @@ public class Room implements Cloneable {
 	public void follow(Player player) {
 		if (hasNPC.State==2) {
 			if (hasNPC.Bond<100) {
-				System.out.println(hasNPC.Bond);
-				System.out.println(hasNPC.Name+" hesitated");
+				if (hasNPC.talk) {
+					System.out.println(hasNPC.Name+" hesitated");
+				} else {
+					System.out.println(hasNPC.Name+": "+hasNPC.Reject);
+				}
 			} else {
 				hasNPC.State = 1;
 				if (hasNPC.hasNPC!=null) {
@@ -96,23 +99,19 @@ public class Room implements Cloneable {
 			System.out.println("You find a "+hasItem.get(0).Name+" and put it into your bag. "+hasItem.get(0).Intro);
 			hasItem.remove(0);
 		} else {
-			System.out.println("Nothing is found");
+			System.out.println("Nothing useful is found");
 		}
 	}
 	
 	public void light(Player player, Item candle, Item flint, Room r2, Room r3, Room r4, Room r5) {
 		if (Dark) {
-			if (player.bag.containsKey(candle.Name)) {
-				if (player.bag.containsKey(flint.Name)) {
-					System.out.println("You light up the Dungeon.");
-					player.bag.remove(candle.Name);
-					Dark = false;
-					Direction.put("north", r2);Direction.put("west", r5);Direction.put("east", r3);Direction.put("south", r4);
-				} else {
-					System.out.println("You can't light candle without flint.");
-				}
+			if (player.bag.containsKey(flint.Name)) {
+				System.out.println("You light up the Dungeon.");
+				player.bag.remove(candle.Name);
+				Dark = false;
+				Direction.put("north", r2);Direction.put("west", r5);Direction.put("east", r3);Direction.put("south", r4);
 			} else {
-				System.out.println("You don't have any candle.");
+				System.out.println("You can't light candle without flint.");
 			}
 		} else {
 			System.out.println("There's enough light.");
@@ -123,6 +122,7 @@ public class Room implements Cloneable {
 	protected Room clone() throws CloneNotSupportedException {
 		Room room = (Room) super.clone();
 		room.hasItem = (ArrayList<Item>) hasItem.clone();
+		room.Direction = (HashMap<String,Room>) Direction.clone();
 		if (hasNPC!=null) {
 			room.hasNPC = hasNPC.clone();
 		}

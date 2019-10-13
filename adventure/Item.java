@@ -19,7 +19,7 @@ public class Item {
 		BOND = bond;
 		Hp = hp;
 		Price = price;
-		Atk = 0;
+		Atk = 20;
 		Dfc = 1.0;
 	}
 	

@@ -51,13 +51,13 @@ public class Adventure {
 		Item firewood = new Item("firewood",3,"You can [use] it to build a bonfire.",0,0,0); Kitchen.hasItem.add(firewood);
 		Item flint = new Item("flint",3,"Good for your adventure.",0,0,0); ServantR.hasItem.add(flint);
 		Item shovel = new Item("shovel",2,"Maybe you can [use] it to dig out something.",0,0,0); Garden2.hasItem.add(shovel);shovel.effect = Dungeon5; shovel.hasItem = boxKey;
-		Item rose = new Item("rose",3,"It's the most beautiful rose you picked from garden",50,0,0);Garden5.hasItem.add(rose);
+		Item rose = new Item("rose",3,"It's the most beautiful rose you picked from garden.",50,0,0);Garden5.hasItem.add(rose);
 		Item wine = new Item("wine",1,"Wanna have a drink?",20,20,0);
 		Item lemoncake = new Item("lemoncake",1,"It's a freshly baked lemoncake decorated with white cream.",70,50,600);//price
 		Item applepie = new Item("apple pie",1,"It's a freshly baked apple pie decorated with jam.",20,50,600);
 		Item strawberry = new Item("strawberry cake",1,"It's a freshly baked strawberry cake decorated with red fondant.",30,50,600);
 		Item diary = new Item("king's diary",3,"The last page reads: \"Lady Annabel sent a load of lemons from Londor. Ashara can't wait to have some lemoncake. It has been her favorite since she travelled to south with her mother three years ago.\"",30,0,0);Study.hasItem.add(diary);
-		Item apple = new Item("apple",1,"It's an juicy apple.",50,10,0);Garden3.hasItem.add(apple);
+		Item apple = new Item("apple",1,"It's a red, juicy apple.",50,10,0);Garden3.hasItem.add(apple);
 		Item roast = new Item("roast lamb",1,"A whole roast lamb!",150,80,0);BanquetHall.hasItem.add(roast);
 		
 		//NPCS
@@ -70,10 +70,10 @@ public class Adventure {
 			PrincessC.hasNPC = demon;
 			PrincessC.Intro1 = "You finally reach the princess's chamber. A red-eyed demon awaits you...";
 		}
-		NPC granny = new NPC("Old woman",true,"Haven't seen a soul for a century. I used to be the cook here. Traveller, would you like some wine?\nOption: [1]Yes [2]No","You gave an old woman a little moment of joy...Do you like those desserts on the table? You may have one...But please leave some money to poor old granny. \n[buy]","I see... You can come to me when you change your mind. What about those desserts on the table? You may have one...But please leave some money to poor old granny.\n[buy]","Would you like some dessert?\n[buy]","","Ha! Men sent me gifts when I was young. Keep this to yourself, traveller.",2,10,5.0);Kitchen.hasNPC = granny;
+		NPC granny = new NPC("Granny",true,"Haven't seen a soul for a century. I used to be the cook here. Traveller, would you like some wine?\nOption: [1]Yes [2]No","You gave an old woman a little moment of joy...Do you like those desserts on the table? You may have one...But please leave some money to poor old granny. \n[buy]","I see... You can come to me when you change your mind. What about those desserts on the table? You may have one...But please leave some money to poor old granny.\n[buy]","Would you like some dessert?\n[buy]","","Ha! Men sent me gifts when I was young. Keep this to yourself, traveller.",2,10,5.0);Kitchen.hasNPC = granny;
 		NPC dragon = new NPC("White dragon",false,"deep roar","","","","","deep roar",0,-50,50.0);Garden4.hasNPC = dragon;
 		NPC thief = new NPC("Thief",false,"","","","","","",0,-100,20.0);Dungeon4.hasNPC = thief;
-		NPC knight = new NPC("Old knight",true,"Are you here for the princess? She can't be alive. If you still want to find her, at least keep one of these.\nOption: [1]Sword [2]Shield [3]Thanks, but I can't accept that","Attack is better defense.","Defense is as important as attack.","Well, that's my gift. You may come and fetch it when you need it.","I used to be a member of King's closest Body Guard. My weapons...were the king's gifts. Use it well.","Keep it to yourself, young man.",3,10,200.0);Armory.hasNPC = knight;
+		NPC knight = new NPC("Knight",true,"Are you here for the princess? She can't be alive. If you still want to find her, at least keep one of these.\nOption: [1]Sword [2]Shield [3]Thanks, but I can't accept that","Attack is better defense.","Defense is better attack.","Well, that's my gift. You may come and fetch it when you need it.","I used to be a member of King's closest Body Guard. My weapons...were the king's gifts. Use it well.","Keep it to yourself, young man.",3,10,200.0);Armory.hasNPC = knight;
 		NPC horse = new NPC("White horse",false,"neighing","","","","","whinnying",0,10,20.0);Stable.hasNPC = horse;
 		demon.hasNPC = princess; princess.hasNPC = horse;
 		demon.evil = true; granny.sell = true; dragon.free = false; thief.steal = true; thief.evil = true;
@@ -112,38 +112,11 @@ public class Adventure {
 		Dungeon1.Direction.put("up",Stable);Dungeon2.Direction.put("south",Dungeon1);Dungeon4.Direction.put("north",Dungeon1);Dungeon5.Direction.put("east",Dungeon1);Dungeon3.Direction.put("west",Dungeon1);
 		me.Location = Gate;
 		me.Location.callIntro();
-		System.out.println("HP: 100 Directions: [go] [east west north]");
+		System.out.println("HP: 100.0  Directions: [go] [east west north]");
 		me.Location.visit();
+		
+		boolean ChatOrBuy = false;
 		while (true) {
-			if (princess.State==1) {
-				if (me.Location.Name.equals("princess's balcony")&&dragon.Bond>=100) {
-					System.out.println("The white dragon flies down to the balcony...\nThe princess and you mount the dragon and fly to the south.\n...\nTHE END");
-					break;
-				} else if (me.Location.Name.equals("gate")) {
-					if (horse.State==1) {
-						System.out.println("The princess and you ride through the gate and escaped the castle...\n...\nTHE END");
-						break;
-					} else {
-						if (demon.State!=0) {
-							System.out.println("The princess and you walk through the gate and escaped the castle...\n...\nTHE END");
-						} else {
-							System.out.println("The princess and you walk through the gate to the bridge over the moat. All of a sudden, the bridge collapsed...\nVoice of owl: It's the demon...He would not let the princess leave...It will be different if you two run faster.");
-							me.hp = 0;
-						}
-					}
-				}
-			}
-			if (me.hp <= 0) {
-				System.out.println("YOU DIED");
-				if (bonfire.saved) {
-					bonfire.awake(me,r);
-					System.out.println("\n...\n\nYou wake up by the bonfire. What just happened? ...");
-					System.out.println("HP: "+me.hp+"  Directions: ["+String.join(" ", me.Location.Direction.keySet())+"]");
-				} else {
-					System.out.println("\nAhhh...like many others, you failed...");
-					break;
-				}
-			}
 			String act = in.nextLine();
 			String[] action = act.split(" ",2);
 			if (me.Location.hasNPC!=null&&(me.Location.hasNPC.inChat||me.Location.hasNPC.inBuy)) {
@@ -174,7 +147,7 @@ public class Adventure {
 					try {
 						String dir = action[1];
 						if (me.Location.hasNPC!=null&&me.Location.hasNPC.evil) {
-							System.out.println(me.Location.hasNPC.Name+"stopped you from escape!");
+							System.out.println(me.Location.hasNPC.Name+" stopped you from escape!");
 						} else {
 							if (me.Location.Direction.containsKey(dir)) {
 								me.Location = me.Location.Direction.get(dir);
@@ -202,24 +175,24 @@ public class Adventure {
 					}
 				} else if (action[0].equals("use")) {
 					try {
-						if (action[1].equals("candle")) {
-							me.Location.light(me, candle, flint, Dungeon2, Dungeon3, Dungeon4, Dungeon5);
-						} else if (action[1].equals("firewood")) {
-							bonfire.build(me, firewood, flint);
-						} else if (action[1].equals("small key")) {
-							if (me.Location.hasTreasure) {
-								treasure.open(me);
+						if (me.bag.containsKey(action[1])) {
+							if (action[1].equals("candle")) {
+								me.Location.light(me, candle, flint, Dungeon2, Dungeon3, Dungeon4, Dungeon5);
+							} else if (action[1].equals("firewood")) {
+								bonfire.build(me, firewood, flint);
+							} else if (action[1].equals("small key")) {
+								if (me.Location.hasTreasure) {
+									treasure.open(me);
+								} else {
+									System.out.println("You can't find any treasure box here.");
+								}
+							} else if (action[1].equals("door key")) {
+								me.Location.openDoor(Tower, doorKey, me);
 							} else {
-								System.out.println("You can't find any treasure box here.");
-							}
-						} else if (action[1].equals("door key")) {
-							me.Location.openDoor(Tower, doorKey, me);
-						} else {
-							if (me.bag.containsKey(action[1])) {
 								me.bag.get(action[1]).use(me);
-							} else {
-								System.out.println("You can't find this in your bag!");
 							}
+						} else {
+							System.out.println("You can't find this in your bag!");
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
 						System.out.println("What to use?");
@@ -264,8 +237,10 @@ public class Adventure {
 						System.out.println("There are not any others.");
 					}
 				} else if (action[0].equals("buy")) {
-					if (me.Location.hasNPC!=null) {
+					if (me.Location.hasNPC!=null&&me.Location.hasNPC.sell) {
 						me.Location.hasNPC.buy(me);					
+					} else {
+						System.out.println("Nothing you can buy here.");
 					}
 				} else if (action[0].equals("free")) {
 					if (me.Location.hasNPC!=null) {
@@ -277,7 +252,7 @@ public class Adventure {
 					if (me.Location.hasNPC!=null) {
 						me.Attack(me.Location.hasNPC);
 					} else {
-						if (me.bag.containsKey("sword")) {
+						if (me.Atk>20) {
 							System.out.println("Voice of owl: Why are you waving your blade in the air?");
 						} else {
 							System.out.println("Voice of owl: Why are you waving your fists in the air?");
@@ -293,7 +268,36 @@ public class Adventure {
 					me.Location.hasNPC.attack(me);
 					me.Location.hasNPC.steal(me);
 				}
-				if (!(me.Location.hasNPC!=null&&(me.Location.hasNPC.inChat||me.Location.hasNPC.inBuy))) {
+				if (princess.State==1) {
+					if (me.Location.equals(Balcony2)&&dragon.Bond>=100&&dragon.free) {
+						System.out.println("The white dragon flies down to the balcony...\nThe princess and you mount the dragon and fly to the south.\n...\nTHE END");
+						break;
+					} else if (me.Location.equals(Gate)) {
+						if (horse.State==1) {
+							System.out.println("The princess and you ride through the gate and escaped the castle...\n...\nTHE END");
+							break;
+						} else {
+							if (demon.State==0) {
+								System.out.println("The princess and you walk through the gate and escaped the castle...\n...\nTHE END");
+								break;
+							} else {
+								System.out.println("The princess and you walk through the gate to the bridge over the moat. All of a sudden, the bridge collapsed...\nVoice of owl: It's the demon...He would not let the princess leave...It will be different if you two run faster.");
+								me.hp = 0;
+							}
+						}
+					}
+				}
+				if (me.hp <= 0) {
+					System.out.println("YOU DIED");
+					if (bonfire.saved) {
+						bonfire.awake(me,r);
+						System.out.println("\n...\n\nYou wake up by the bonfire. What just happened? ...");
+					} else {
+						System.out.println("\nAhhh...like many others, you failed...");
+						break;
+					}
+				}
+				if (!(ChatOrBuy)) {
 					System.out.println("HP: "+me.hp+"  Directions: ["+String.join(" ", me.Location.Direction.keySet())+"]");
 				}
 			}

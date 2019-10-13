@@ -68,27 +68,28 @@ public class NPC implements Cloneable {
 	}
 	
 	public void buy(Player player) {
-		if (sell) {
-			int i = 1;
-			for (Item item: sellItem) {
-				System.out.print("["+i+"] "+item.Name+": "+item.Price+"; ");
-				i += 1;
-			}
-			System.out.println("["+i+"] quit");
-			System.out.println("Your coins: "+player.coin);
-			inBuy = true;
+		System.out.println(Name+": I see. Which of them do you want?");
+		int i = 1;
+		for (Item item: sellItem) {
+			System.out.print("["+i+"] "+item.Name+": "+item.Price+"; ");
+			i += 1;
 		}
+		System.out.println("["+i+"] quit");
+		System.out.println("Your coins: "+player.coin);
+		inBuy = true;
 	}
-		
+	
 	public void free(Player player) {
 		if (free) {
 			System.out.println(Name+" is free!");
 		} else {
 			player.Location.hasNPC = null;
 			if (Bond>=100) {
+				free = true;
 				System.out.println("The dragon flies up to the sky immediately, hovering above the castle.");
 			} else {
 				player.hp -= Atk*player.Dfc;
+				free = true;
 				System.out.println("The dragon attacks you as you frees it. Then it flies up to the dusk sky, hovering above the castle.");
 			}
 		}
@@ -140,7 +141,7 @@ public class NPC implements Cloneable {
 				chated = true;
 				inChat = false;
 			} else {
-				System.out.println(Dialogue[chatOption]);
+				System.out.println(Name+": "+Dialogue[chatOption]);
 				inChat = false;
 			}
 		}
