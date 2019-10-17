@@ -10,6 +10,7 @@ public class Dialogue {
 	static HashMap<String,ArrayList<String>> ans = new HashMap<>();
 	static String filepath = "C:\\Users\\surface\\eclipse-workspace\\DST\\src\\w4\\dialogue.txt";
 	static ArrayList<String> ANS = new ArrayList<>();
+	static String key;
 	public static void read(){
 		try {
 			FileInputStream inputStream = new FileInputStream(filepath);
@@ -30,7 +31,7 @@ public class Dialogue {
 	}
 	public static void add(String q, String a) {
 		if (Contains(ans,q,false)) {
-			ans.get(q).add(a);
+			ans.get(key).add(a);
 		} else {
 			ArrayList<String> A = new ArrayList<>();
 			A.add(a);
@@ -56,6 +57,8 @@ public class Dialogue {
             if(entry.getKey().equalsIgnoreCase(str)) {
             	if (genANS) {
             		ANS.addAll(entry.getValue());
+            	} else {
+            		key = entry.getKey();
             	}
             	return true;
             }
